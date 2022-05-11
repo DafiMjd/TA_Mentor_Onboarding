@@ -4,8 +4,8 @@ const Map<String, Map<String, dynamic>> STATUSES = {
   "all_activity": {"title": "All Activity", "color": STATUS_GREY},
   "assigned": {"title": "Assigned", "color": STATUS_GREY},
   "on_progress": {"title": "On Progress", "color": STATUS_BLUE},
-  "completed": {"title": "Completed", "color": STATUS_YELLOW},
-  "validated": {"title": "Validated", "color": STATUS_GREEN},
-  "hold": {"title": "Hold", "color": STATUS_GREY},
-  "closed": {"title": "Closed", "color": STATUS_GREY},
+  "submitted": {"title": "Submitted", "color": STATUS_YELLOW},
+  "late": {"title": "Late", "color": STATUS_RED},
+  "rejected": {"title": "Rejected", "color": STATUS_ORANGE},
+  "completed": {"title": "Completed", "color": STATUS_GREEN},
 };

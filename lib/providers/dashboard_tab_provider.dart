@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'package:http/http.dart' as http;
 import 'package:ta_mentor_onboarding/models/jobtitle.dart';
+import 'package:ta_mentor_onboarding/models/role.dart';
 import 'package:ta_mentor_onboarding/models/user.dart';
 import 'dart:convert';
 
@@ -29,6 +30,7 @@ class DashboardTabProvider with ChangeNotifier {
           phone_number: "null",
           progress: 0,
           birtdate: "null",
+        role: Role(id: 0, name: "null"),
           jobtitle: Jobtitle(
               id: 0, jobtitle_name: "null", jobtitle_description: "null"));
   get user => _user;
@@ -69,9 +71,10 @@ class DashboardTabProvider with ChangeNotifier {
         },
       );
 
-      if (result.statusCode == 502) {
+      if (result.statusCode == 502 || result.statusCode == 500) {
         throw "Server Down";
       }
+
 
       return compute(parseUser, result.body);
     } catch (e) {
@@ -96,7 +99,7 @@ User parseUser(String responseBody) {
   try {
     final parsed = jsonDecode(responseBody);
 
-    return User.createUser(parsed);
+    return User.fromJson(parsed);
   } catch (e) {
     rethrow;
   }

@@ -73,19 +73,19 @@ class EditProfileProvider extends ChangeNotifier {
         },
       );
 
-      if (result.statusCode == 502) {
+      
+      if (result.statusCode == 502 || result.statusCode == 500) {
         throw "Server Down";
       }
 
       return compute(parseUser, result.body);
     } catch (e) {
-      print("dafi e" + e.toString());
       rethrow;
     }
   }
 
   Future<User> editProfile(
-      String name, String gender, String phoneNum, String date) async {
+      String name, String gender, String phoneNum, String date, int role_id, int jobtitle_id) async {
     // getAuthInfo();
     String apiURL = "$BASE_URL/api/User/";
 
@@ -103,12 +103,15 @@ class EditProfileProvider extends ChangeNotifier {
           body: jsonEncode({
             "email": _email,
             "name": name,
+            "role_id": role_id,
+            "jobtitle_id": jobtitle_id,
             "gender": gender,
-            "phone_number": phoneNum,
             "birthdate": date,
+            "phone_number": phoneNum,
           }));
 
-      if (result.statusCode == 502) {
+      
+      if (result.statusCode == 502 || result.statusCode == 500) {
         throw "Server Down";
       }
 
@@ -126,7 +129,7 @@ User parseUser(String responseBody) {
   try {
     final parsed = jsonDecode(responseBody);
 
-    return User.createUser(parsed);
+    return User.fromJson(parsed);
   } catch (e) {
     rethrow;
   }

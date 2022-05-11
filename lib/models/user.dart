@@ -1,5 +1,6 @@
 // import 'package:intl/intl.dart';
 import 'package:ta_mentor_onboarding/models/jobtitle.dart';
+import 'package:ta_mentor_onboarding/models/role.dart';
 
 class User {
   double progress;
@@ -7,6 +8,7 @@ class User {
   String email, name, gender, phone_number;
   String birtdate;
   Jobtitle jobtitle;
+  Role role;
 
   User({
     required this.email,
@@ -16,9 +18,10 @@ class User {
     required this.progress,
     required this.birtdate,
     required this.jobtitle,
+    required this.role
   });
 
-  factory User.createUser(Map<String, dynamic> json) {
+  factory User.fromJson(Map<String, dynamic> json) {
     // final DateFormat formatter = DateFormat('yyyy-MM-dd');
     // final DateTime birtDate = DateTime.parse(json['birthdate']);
     // final String dateFormatted = formatter.format(birtDate);
@@ -31,6 +34,7 @@ class User {
         phone_number: json['phone_number'],
         progress: json['progress'].toDouble(),
         jobtitle: Jobtitle.fromJson(json['jobtitle_']),
-        birtdate: json['birthdate']);
+        birtdate: json['birthdate'],
+        role: Role.fromJson(json['role_']));
   }
 }

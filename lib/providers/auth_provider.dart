@@ -53,7 +53,7 @@ class AuthProvider with ChangeNotifier {
     String apiURL = "$BASE_URL/api/Auth/login-mentor";
 
     try {
-      var apiResult = await http.post(Uri.parse(apiURL),
+      var result = await http.post(Uri.parse(apiURL),
           headers: {
             "Access-Control-Allow-Origin":
                 "*", // Required for CORS support to work
@@ -65,10 +65,15 @@ class AuthProvider with ChangeNotifier {
           body: jsonEncode({"email": email, "password": password}));
 
 
-      Map<String, dynamic> responseData = jsonDecode(apiResult.body);
+      Map<String, dynamic> responseData = jsonDecode(result.body);
 
-      if (apiResult.statusCode == 400) {
+      if (result.statusCode == 400) {
         throw responseData['errorMessage'];
+      }
+
+
+      if (result.statusCode == 502 || result.statusCode == 500) {
+        throw "Server Down";
       }
 
       _storeAuthInfo(responseData['token'],

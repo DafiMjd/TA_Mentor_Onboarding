@@ -36,11 +36,21 @@ dependencies:
   cupertino_icons: ^1.0.2
 
   provider: ^6.0.2
+
+  # splash screen
   flutter_native_splash: ^0.2.8
-  percent_indicator: ^3.4.0
+
+  # http request
   http: ^0.13.4
+
+  # auth storage
   flutter_secure_storage: ^5.0.2
+
+  # formatter
   intl: ^0.17.0
+
+  # progress bar
+  percent_indicator: ^3.4.0
 
 dev_dependencies:
   flutter_test:

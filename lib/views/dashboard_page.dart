@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:ta_mentor_onboarding/models/jobtitle.dart';
+import 'package:ta_mentor_onboarding/models/role.dart';
 import 'package:ta_mentor_onboarding/models/user.dart';
 import 'package:ta_mentor_onboarding/providers/dashboard_tab_provider.dart';
 import 'package:ta_mentor_onboarding/utils/constans.dart';
@@ -11,6 +12,7 @@ import 'package:ta_mentor_onboarding/views/bottom_navbar.dart';
 import 'package:ta_mentor_onboarding/views/home/home_page.dart';
 import 'package:ta_mentor_onboarding/views/profile/profile_page.dart';
 import 'package:ta_mentor_onboarding/views/test_home.dart';
+import 'package:ta_mentor_onboarding/widgets/loading_widget.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({Key? key}) : super(key: key);
@@ -32,6 +34,7 @@ class _DashboardPageState extends State<DashboardPage> {
         phone_number: "null",
         progress: 0,
         birtdate: "null",
+        role: Role(id: 0, name: "null"),
         jobtitle: Jobtitle(
             id: 0, jobtitle_name: "null", jobtitle_description: "null"));
     return showDialog(
@@ -54,13 +57,15 @@ class _DashboardPageState extends State<DashboardPage> {
     dashProv.isFetchingData = true;
 
     try {
-        var u = await dashProv.getUserInfo();
-        dashProv.user = u;
-        dashProv.isFetchingData = false;
-      } catch (e) {
-        dashProv.isFetchingData = false;
-        errorFetchingUser(e);
-      }
+      print('d');
+      var u = await dashProv.getUserInfo();
+      dashProv.user = u;
+      dashProv.isFetchingData = false;
+    } catch (e) {
+      print('d error');
+      dashProv.isFetchingData = false;
+      errorFetchingUser(e);
+    }
 
     // runZonedGuarded(() async {
     //   try {
@@ -76,7 +81,6 @@ class _DashboardPageState extends State<DashboardPage> {
     //     dashProv.isFetchingData = false;
     //     errorFetchingUser(e);
     // });
-  
   }
 
   // void errorFetchingCategories(e) async {
@@ -121,7 +125,7 @@ class _DashboardPageState extends State<DashboardPage> {
   //   //   dashProv.isFetchingData = false;
   //   //   errorFetchingCategories(e);
   //   // });
-  
+
   // }
 
   @override
@@ -148,11 +152,7 @@ class _DashboardPageState extends State<DashboardPage> {
               );
       }
       if (dashboardTabProvider.tab == ACTIVITY_PAGE) {
-        return (dashProv.isFetchingData)
-            ? LoadingScreen()
-            : ActivityPage(
-                userProgress: user.progress,
-              );
+        return (dashProv.isFetchingData) ? LoadingScreen() : ActivityPage();
       } else if (dashboardTabProvider.tab == PROFILE_PAGE) {
         return (dashProv.isFetchingData)
             ? LoadingScreen()
@@ -178,7 +178,7 @@ class LoadingScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Center(child: CircularProgressIndicator()),
+      body: LoadingWidget(),
     );
   }
 }
