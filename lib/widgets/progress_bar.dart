@@ -18,6 +18,7 @@ class ProgressBar extends StatelessWidget {
       width: MediaQuery.of(context).size.width * 0.3,
       child: 
         LinearPercentIndicator(
+          backgroundColor: BROWN_GARUDA,
           alignment: MainAxisAlignment.center,
           animation: true,
           lineHeight: 20.0,

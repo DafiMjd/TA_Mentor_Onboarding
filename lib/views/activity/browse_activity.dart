@@ -7,50 +7,46 @@ import 'package:ta_mentor_onboarding/providers/activity/browse_activity_provider
 import 'package:ta_mentor_onboarding/utils/custom_colors.dart';
 import 'package:ta_mentor_onboarding/views/activity/activity_item.dart';
 import 'package:ta_mentor_onboarding/views/activity/top_nav_bar.dart';
+import 'package:ta_mentor_onboarding/widgets/error_alert_dialog.dart';
+import 'package:ta_mentor_onboarding/widgets/loading_widget.dart';
 import 'package:ta_mentor_onboarding/widgets/space.dart';
 
-class BrowseActivityPage extends StatefulWidget {
-  const BrowseActivityPage({Key? key, required this.user}) : super(key: key);
+class BrowseActivity extends StatefulWidget {
+  const BrowseActivity({Key? key, required this.user}) : super(key: key);
 
   final User user;
 
   @override
-  State<BrowseActivityPage> createState() => _BrowseActivityPageState();
+  State<BrowseActivity> createState() => _BrowseActivityState();
 }
 
-class _BrowseActivityPageState extends State<BrowseActivityPage> {
+class _BrowseActivityState extends State<BrowseActivity> {
   late BrowseActivityProvider prov;
   late List<StatusMenu> menus;
   late List<ActivityOwned> activitiesOwned;
+  late String curMenuId;
 
   @override
   void initState() {
     super.initState();
     prov = Provider.of<BrowseActivityProvider>(context, listen: false);
 
+    curMenuId = 'all_activity';
+
     initMenu();
-    fetchActivities(widget.user.email, 'all_activity');
+    fetchActivities(widget.user.email, curMenuId);
   }
 
   void initMenu() {
     prov.menus = _changeMenuState(prov.menus, 0);
   }
 
-  void errorFetchingActivities(e) async {
+  void errorFetchActivities(e) async {
     activitiesOwned = [];
     return showDialog(
         context: context,
         builder: (context) {
-          return AlertDialog(
-            title: Text("HTTP Error"),
-            content: Text("$e"),
-            actions: [
-              TextButton(
-                  onPressed: () =>
-                      Navigator.of(context, rootNavigator: true).pop(),
-                  child: Text("okay"))
-            ],
-          );
+          return ErrorAlertDialog(error: "HTTP Error", title: e.toString());
         });
   }
 
@@ -63,12 +59,13 @@ class _BrowseActivityPageState extends State<BrowseActivityPage> {
       if (status == allActId) {
         activitiesOwned = await prov.fetchActOwnedByUser(email);
       } else {
+        print(status);
         activitiesOwned = await prov.fetchActOwnedByUserByStatus(email, status);
       }
       prov.isFetchingData = false;
     } catch (e) {
       prov.isFetchingData = false;
-      errorFetchingActivities(e);
+      errorFetchActivities(e);
     }
   }
 
@@ -81,38 +78,40 @@ class _BrowseActivityPageState extends State<BrowseActivityPage> {
           foregroundColor: Colors.black,
           backgroundColor: ORANGE_GARUDA,
           title: Text(widget.user.name + '\'s Activities')),
-      body: Column(children: [
+      body: Column(mainAxisSize: MainAxisSize.min,  children: [
         _topNavBarBuilder(),
         Space.space(),
         (prov.isFetchingData)
-            ? CircularProgressIndicator()
-            : (activitiesOwned.isEmpty)
-                ? Text(
-                    'No Activity',
-                    style: TextStyle(fontSize: 24),
-                  )
-                :
-                // activity card
+            ? LoadingWidget()
+            :
+            // activity card
 
-                ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: activitiesOwned.length,
-                    itemBuilder: (context, i) {
-                      return InkWell(
-                        onTap: () {},
-                        // onTap: () => Navigator.push(context,
-                        //     MaterialPageRoute(builder: (context) {
-                        //   return PreActivityPage(
-                        //       activityOwned: activitiesOwned[i]);
-                        // })),
-                        child: ActivityItem(
-                          title: activitiesOwned[i].activity.activity_name,
-                          description:
-                              activitiesOwned[i].activity.activity_description,
-                          statusId: activitiesOwned[i].status,
+            RefreshIndicator(
+                onRefresh: () async {
+                  setState(() {
+                    fetchActivities(widget.user.email, curMenuId);
+                  });
+                },
+                child: (activitiesOwned.isEmpty)
+                    ? SingleChildScrollView(
+                        physics: AlwaysScrollableScrollPhysics(),
+                        child: SizedBox(
+                          height: MediaQuery.of(context).size.height / 2,
+                          child: Text(
+                            'No Activity',
+                            style: TextStyle(fontSize: 24),
+                          ),
                         ),
-                      );
-                    }),
+                      )
+                    : ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: activitiesOwned.length,
+                        itemBuilder: (context, i) {
+                          return ActivityItem(
+                            activityOwned: activitiesOwned[i],
+                          );
+                        }),
+              ),
       ]),
     );
   }
@@ -140,9 +139,10 @@ class _BrowseActivityPageState extends State<BrowseActivityPage> {
             }));
   }
 
-  List<StatusMenu> _changeMenuState(List<StatusMenu> menu, index) {
+  List<StatusMenu> _changeMenuState(List<StatusMenu> menu, selectedIndex) {
+    curMenuId = menu[selectedIndex].id;
     for (int i = 0; i < menu.length; i++) {
-      if (i == index) {
+      if (i == selectedIndex) {
         menu[i].selected = true;
       } else {
         menu[i].selected = false;

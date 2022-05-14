@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 class ErrorAlertDialog extends StatelessWidget {
   ErrorAlertDialog({
     Key? key,
-    required this.error,
-    required this.title
+    required this.title,
+    required this.error
   }) : super(key: key);
 
   String error;

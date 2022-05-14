@@ -17,3 +17,14 @@ const Color STATUS_ORANGE = Color(0xffF88B0B);
 const Color EDIT_PROFILE_COLOR = Color(0xffF88B0B);
 
 const Color CATEGORY_CARD = Color(0xff2DB44B);
+
+// Leaderboard
+
+const Color BLUE_1ST = Color.fromARGB(255, 0, 89, 255);
+const Color SILVER_2ND = Color(0xffC0C0C0);
+const Color BROWN_3RD = Color(0xff964B00);
+const Color GREY_4TH = Colors.grey;
+
+
+
+

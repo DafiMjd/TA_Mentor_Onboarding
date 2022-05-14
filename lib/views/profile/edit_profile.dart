@@ -41,8 +41,8 @@ class _EditProfileState extends State<EditProfile> {
           gender,
           phoneNum,
           dateFormatted,
-          widget.user.role.id,
-          widget.user.jobtitle.id);
+          widget.user.role!.id,
+          widget.user.jobtitle!.id);
     } catch (onError) {
       return showDialog(
           context: context,

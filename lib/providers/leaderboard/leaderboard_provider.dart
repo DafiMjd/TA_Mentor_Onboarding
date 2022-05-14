@@ -5,7 +5,7 @@ import 'package:ta_mentor_onboarding/utils/constans.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-class ActivityProvider extends ChangeNotifier {
+class LeaderboardProvider extends ChangeNotifier {
   late String _token, _email;
   void recieveToken(auth) {
     _token = auth.token;

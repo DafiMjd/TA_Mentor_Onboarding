@@ -1,32 +1,30 @@
 import 'package:flutter/material.dart';
-import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:provider/provider.dart';
 import 'package:ta_mentor_onboarding/models/user.dart';
-import 'package:ta_mentor_onboarding/providers/activity/activity_provider.dart';
+import 'package:ta_mentor_onboarding/providers/leaderboard/leaderboard_provider.dart';
 import 'package:ta_mentor_onboarding/utils/custom_colors.dart';
-import 'package:ta_mentor_onboarding/utils/formatter.dart';
-import 'package:ta_mentor_onboarding/views/activity/browse_activity.dart';
 import 'package:ta_mentor_onboarding/views/bottom_navbar.dart';
 import 'package:ta_mentor_onboarding/widgets/error_alert_dialog.dart';
 import 'package:ta_mentor_onboarding/widgets/loading_widget.dart';
 import 'package:ta_mentor_onboarding/widgets/progress_bar.dart';
 
-class ActivityPage extends StatefulWidget {
-  const ActivityPage({Key? key}) : super(key: key);
+class LeaderboardPage extends StatefulWidget {
+  LeaderboardPage({Key? key}) : super(key: key);
 
   @override
-  State<ActivityPage> createState() => _ActivityPageState();
+  State<LeaderboardPage> createState() => _LeaderboardPageState();
 }
 
-class _ActivityPageState extends State<ActivityPage> {
-  late ActivityProvider prov;
+class _LeaderboardPageState extends State<LeaderboardPage> {
+  late LeaderboardProvider prov;
+
   late List<User> users;
 
   @override
   void initState() {
     super.initState();
 
-    prov = Provider.of<ActivityProvider>(context, listen: false);
+    prov = Provider.of<LeaderboardProvider>(context, listen: false);
     fetchUsers();
   }
 
@@ -44,6 +42,8 @@ class _ActivityPageState extends State<ActivityPage> {
 
     try {
       users = await prov.fetchUsers(4);
+      users.sort((a, b) => b.progress.compareTo(a.progress));
+
       prov.isFetchingData = false;
     } catch (e) {
       prov.isFetchingData = false;
@@ -53,15 +53,12 @@ class _ActivityPageState extends State<ActivityPage> {
 
   @override
   Widget build(BuildContext context) {
-    prov = context.watch<ActivityProvider>();
-    final ScrollController _scrollController = ScrollController();
+    prov = context.watch<LeaderboardProvider>();
     return Scaffold(
       appBar: AppBar(
+        title: Text('Leaderboard'),
         backgroundColor: ORANGE_GARUDA,
-        title: Text(
-          "Activity",
-          style: TextStyle(color: Colors.black),
-        ),
+        foregroundColor: Colors.black,
       ),
       body: (prov.isFetchingData)
           ? LoadingWidget()
@@ -86,17 +83,7 @@ class _ActivityPageState extends State<ActivityPage> {
                       shrinkWrap: true,
                       itemCount: users.length,
                       itemBuilder: (context, i) {
-                        return UsersWithProgressWidget(
-                          user: users[i],
-                          press: () {
-                            Navigator.push(context,
-                                MaterialPageRoute(builder: (context) {
-                              return BrowseActivity(
-                                user: users[i],
-                              );
-                            }));
-                          },
-                        );
+                        return LeaderboardTile(rank: i, user: users[i]);
                       }),
             ),
       bottomNavigationBar: BottomNavBar(),
@@ -104,30 +91,46 @@ class _ActivityPageState extends State<ActivityPage> {
   }
 }
 
-class UsersWithProgressWidget extends StatelessWidget {
-  const UsersWithProgressWidget(
-      {Key? key, required this.user, required this.press})
+class LeaderboardTile extends StatelessWidget {
+  const LeaderboardTile({Key? key, required this.rank, required this.user})
       : super(key: key);
 
   final User user;
-  final VoidCallback press;
+  final int rank;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: press,
       child: Container(
           margin: EdgeInsets.all(5),
           child: Card(
             elevation: 5,
             child: ListTile(
+                leading: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      Icons.star_border_purple500_rounded,
+                      color: getStarColor(rank),
+                    ),
+                    Text((rank+1).toString()),
+                  ],
+                ),
                 title: Text(user.name),
-                subtitle: Text(user.finishedActivities.toString() +
-                    '/' +
-                    user.assignedActivities.toString() +
-                    ' Activities'),
                 trailing: ProgressBar(progress: user.progress)),
           )),
     );
+  }
+
+  getStarColor(id) {
+    if (id == 0) {
+      return BLUE_1ST;
+    } else if (id == 1) {
+      return SILVER_2ND;
+    } else if (id == 2) {
+      return BROWN_3RD;
+    } else {
+      return GREY_4TH;
+    }
   }
 }

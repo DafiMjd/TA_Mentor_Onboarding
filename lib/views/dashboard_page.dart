@@ -10,6 +10,7 @@ import 'package:ta_mentor_onboarding/utils/constans.dart';
 import 'package:ta_mentor_onboarding/views/activity/activity_page.dart';
 import 'package:ta_mentor_onboarding/views/bottom_navbar.dart';
 import 'package:ta_mentor_onboarding/views/home/home_page.dart';
+import 'package:ta_mentor_onboarding/views/leaderboard/leaderboard_page.dart';
 import 'package:ta_mentor_onboarding/views/profile/profile_page.dart';
 import 'package:ta_mentor_onboarding/views/test_home.dart';
 import 'package:ta_mentor_onboarding/widgets/loading_widget.dart';
@@ -34,6 +35,8 @@ class _DashboardPageState extends State<DashboardPage> {
         phone_number: "null",
         progress: 0,
         birtdate: "null",
+        assignedActivities: 0,
+        finishedActivities: 0,
         role: Role(id: 0, name: "null"),
         jobtitle: Jobtitle(
             id: 0, jobtitle_name: "null", jobtitle_description: "null"));
@@ -66,74 +69,13 @@ class _DashboardPageState extends State<DashboardPage> {
       dashProv.isFetchingData = false;
       errorFetchingUser(e);
     }
-
-    // runZonedGuarded(() async {
-    //   try {
-    //     var u = await dashProv.getUserInfo();
-    //     dashProv.user = u;
-    //     dashProv.isFetchingData = false;
-    //   } catch (e) {
-    //     dashProv.isFetchingData = false;
-    //     errorFetchingUser(e);
-    //   }
-    // }, (e, s) async {
-    //   print("uncaught");
-    //     dashProv.isFetchingData = false;
-    //     errorFetchingUser(e);
-    // });
   }
-
-  // void errorFetchingCategories(e) async {
-  //   categories = [];
-  //   return showDialog(
-  //       context: context,
-  //       builder: (context) {
-  //         return AlertDialog(
-  //           title: Text("HTTP Error"),
-  //           content: Text("$e"),
-  //           actions: [
-  //             TextButton(
-  //                 onPressed: () =>
-  //                     Navigator.of(context, rootNavigator: true).pop(),
-  //                 child: Text("okay"))
-  //           ],
-  //         );
-  //       });
-  // }
-
-  // void fetchCategories() async {
-  //   dashProv.isFetchingData = true;
-
-  //   try {
-  //       categories = await dashProv.fetchActivityCategories();
-  //       dashProv.isFetchingData = false;
-  //     } catch (e) {
-  //       dashProv.isFetchingData = false;
-  //       errorFetchingCategories(e);
-  //     }
-
-  //   // runZonedGuarded(() async {
-  //   //   try {
-  //   //     categories = await dashProv.fetchActivityCategories();
-  //   //     dashProv.isFetchingData = false;
-  //   //   } catch (e) {
-  //   //     dashProv.isFetchingData = false;
-  //   //     errorFetchingCategories(e);
-  //   //   }
-  //   // }, (e, s) async {
-  //   //   categories = [];
-  //   //   dashProv.isFetchingData = false;
-  //   //   errorFetchingCategories(e);
-  //   // });
-
-  // }
 
   @override
   void initState() {
     super.initState();
     dashProv = Provider.of<DashboardTabProvider>(context, listen: false);
     fetchUser();
-    // fetchCategories();
   }
 
   @override
@@ -150,8 +92,7 @@ class _DashboardPageState extends State<DashboardPage> {
             : HomePage(
                 user: user,
               );
-      }
-      if (dashboardTabProvider.tab == ACTIVITY_PAGE) {
+      } else if (dashboardTabProvider.tab == ACTIVITY_PAGE) {
         return (dashProv.isFetchingData) ? LoadingScreen() : ActivityPage();
       } else if (dashboardTabProvider.tab == PROFILE_PAGE) {
         return (dashProv.isFetchingData)
@@ -159,6 +100,8 @@ class _DashboardPageState extends State<DashboardPage> {
             : ProfilePage(
                 user: user,
               );
+      } else if (dashboardTabProvider.tab == LEADERBOARD_PAGE) {
+        return (dashProv.isFetchingData) ? LoadingScreen() : LeaderboardPage();
       }
       return Scaffold(
         bottomNavigationBar: BottomNavBar(),

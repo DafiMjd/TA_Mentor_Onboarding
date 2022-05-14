@@ -30,6 +30,8 @@ class DashboardTabProvider with ChangeNotifier {
           phone_number: "null",
           progress: 0,
           birtdate: "null",
+          assignedActivities: 0,
+          finishedActivities: 0,
         role: Role(id: 0, name: "null"),
           jobtitle: Jobtitle(
               id: 0, jobtitle_name: "null", jobtitle_description: "null"));
@@ -78,21 +80,15 @@ class DashboardTabProvider with ChangeNotifier {
 
       return compute(parseUser, result.body);
     } catch (e) {
-      print("dafi e" + e.toString());
       rethrow;
     }
   }
 
   // =======
 
-  // Acitivy Category
-  // =======
   
 }
 
-// Acitivy Category
-
-// =======
 
 // Users
 User parseUser(String responseBody) {

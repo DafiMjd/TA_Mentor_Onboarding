@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:ta_mentor_onboarding/providers/activity/activity_detail_provider.dart';
 import 'package:ta_mentor_onboarding/providers/activity/activity_provider.dart';
 import 'package:ta_mentor_onboarding/providers/activity/browse_activity_provider.dart';
 import 'package:ta_mentor_onboarding/providers/auth_provider.dart';
 import 'package:ta_mentor_onboarding/providers/dashboard_tab_provider.dart';
 import 'package:ta_mentor_onboarding/providers/home/home_provider.dart';
+import 'package:ta_mentor_onboarding/providers/leaderboard/leaderboard_provider.dart';
 import 'package:ta_mentor_onboarding/providers/profile/change_password_provider.dart';
 import 'package:ta_mentor_onboarding/providers/profile/edit_profile_provider.dart';
 import 'package:ta_mentor_onboarding/providers/profile/user_provider.dart';
@@ -75,6 +77,23 @@ class MyApp extends StatelessWidget {
               }
               return BrowseActivityProvider();
             }),
+        ChangeNotifierProxyProvider<AuthProvider, ActivityDetailProvider>(
+            create: (context) => ActivityDetailProvider(),
+            update: (context, authProv, detailProv) {
+              if (detailProv != null) {
+                return detailProv..recieveToken(authProv);
+              }
+              return ActivityDetailProvider();
+            }),
+        ChangeNotifierProxyProvider<AuthProvider, LeaderboardProvider>(
+            create: (context) => LeaderboardProvider(),
+            update: (context, authProv, leaderboardProv) {
+              if (leaderboardProv != null) {
+                return leaderboardProv..recieveToken(authProv);
+              }
+              return LeaderboardProvider();
+            }),
+
       ],
       builder: (context, child) => Consumer<AuthProvider>(
           builder: (context, auth, child) => MaterialApp(

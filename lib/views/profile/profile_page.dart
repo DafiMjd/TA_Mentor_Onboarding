@@ -74,7 +74,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 style: TextStyle(fontSize: 16),
                               ),
                               Text(
-                                widget.user.jobtitle.jobtitle_name,
+                                widget.user.jobtitle!.jobtitle_name,
                                 style: TextStyle(fontSize: 14),
                                 textAlign: TextAlign.end,
                               )
@@ -174,7 +174,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         Container(
                           margin: EdgeInsets.all(5),
                           child: Text(
-                            widget.user.jobtitle.jobtitle_name,
+                            widget.user.jobtitle!.jobtitle_name,
                             style: TextStyle(fontSize: 16),
                           ),
                         )

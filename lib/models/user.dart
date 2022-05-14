@@ -7,8 +7,10 @@ class User {
 
   String email, name, gender, phone_number;
   String birtdate;
-  Jobtitle jobtitle;
-  Role role;
+  Jobtitle? jobtitle;
+  Role? role;
+  int assignedActivities, finishedActivities;
+
 
   User({
     required this.email,
@@ -18,7 +20,9 @@ class User {
     required this.progress,
     required this.birtdate,
     required this.jobtitle,
-    required this.role
+    required this.role,
+    required this.assignedActivities,
+    required this.finishedActivities
   });
 
   factory User.fromJson(Map<String, dynamic> json) {
@@ -27,14 +31,24 @@ class User {
     // final String dateFormatted = formatter.format(birtDate);
 
 
+    var jobtitle = (json['jobtitle_'] == null)
+        ? null
+        : Jobtitle.fromJson(json['jobtitle_']);
+    var role = (json['role_'] == null)
+        ? null
+        : Role.fromJson(json['role_']);
+
+
     return User(
         email: json['email'],
         name: json['name'],
         gender: json['gender'],
         phone_number: json['phone_number'],
         progress: json['progress'].toDouble(),
-        jobtitle: Jobtitle.fromJson(json['jobtitle_']),
+        jobtitle: jobtitle,
         birtdate: json['birthdate'],
-        role: Role.fromJson(json['role_']));
+        role: role,
+        assignedActivities: json['assignedActivities'],
+        finishedActivities: json['finishedActivities']);
   }
 }

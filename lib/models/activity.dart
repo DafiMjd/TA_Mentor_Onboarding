@@ -5,7 +5,7 @@ import 'package:ta_mentor_onboarding/models/activity_category.dart';
 class Activity {
   int id;
   String activity_name, activity_description;
-  ActivityCategory category;
+  ActivityCategory? category;
 
   Activity(
       {required this.id,
@@ -14,11 +14,12 @@ class Activity {
       required this.category});
 
   factory Activity.fromJson(Map<String, dynamic> json) {
+    var cat = (json['category_'] == null) ? null : ActivityCategory.fromJson(json['category_']);
     return Activity(
       id: json['id'],
       activity_name: json['activity_name'],
       activity_description: json['activity_description'],
-      category: ActivityCategory.fromJson(json['category_']),
+      category: cat,
     );
   }
 }

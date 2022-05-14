@@ -13,7 +13,7 @@ class BrowseActivityProvider extends ChangeNotifier {
     StatusMenu(id: "all_activity", statusName: "All Activity", selected: false),
     StatusMenu(id: "assigned", statusName: "Assigned", selected: false),
     StatusMenu(id: "on_progress", statusName: "On Progress", selected: false),
-    StatusMenu(id: "submittted", statusName: "Submitted", selected: false),
+    StatusMenu(id: "submitted", statusName: "Submitted", selected: false),
     StatusMenu(id: "late", statusName: "Late", selected: false),
     StatusMenu(id: "Rejected", statusName: "Rejected", selected: false),
     StatusMenu(id: "completed", statusName: "Completed", selected: false),
@@ -126,8 +126,6 @@ Future<List<ActivityOwned>> fetchActOwnedByUserByStatus(String email, String sta
 List<ActivityOwned> parseActivitiesOwned(String responseBody) {
   List<Map<String, dynamic>> parsed =
       jsonDecode(responseBody).cast<Map<String, dynamic>>();
-
-      print(parsed);
 
   return parsed
       .map<ActivityOwned>((json) => ActivityOwned.fromJson(json))
