@@ -35,24 +35,24 @@ class _ActivityDetailState extends State<ActivityDetail> {
   @override
   Widget build(BuildContext context) {
     prov = context.watch<ActivityDetailProvider>();
-    return (prov.isFetchingData) ? LoadingScreen() :
-    Scaffold(
+    return Scaffold(
       appBar: AppBar(
         foregroundColor: Colors.black,
         backgroundColor: ORANGE_GARUDA,
         title: Text(
-          actOwned.activity.activity_name,
+          'Detail Activity',
           style: TextStyle(color: Colors.black),
         ),
       ),
       body: RefreshIndicator(
-              onRefresh: () async {
-                setState(() {
-                  _fetchActOwned(actOwned.id);
-                  print(actOwned.status);
-                });
-              },
-              child: SingleChildScrollView(
+        onRefresh: () async {
+          setState(() {
+            _fetchActOwned(actOwned.id);
+          });
+        },
+        child: (prov.isFetchingData)
+            ? LoadingWidget()
+            : SingleChildScrollView(
                 physics: AlwaysScrollableScrollPhysics(),
                 child: Container(
                     margin: EdgeInsets.all(10),
@@ -67,53 +67,41 @@ class _ActivityDetailState extends State<ActivityDetail> {
                             ElevatedButton(
                               onPressed: (actOwned.status == 'submitted')
                                   ? () {
-                                      _editActOwnedStatus(
-                                          actOwned.id,
-                                          actOwned.user.email,
-                                          'rejected');
+                                      _editActOwnedStatus(actOwned.id,
+                                          actOwned.user.email, 'rejected');
                                     }
                                   : () {},
                               child: Text('Reject'),
                               style: ElevatedButton.styleFrom(
-                                  primary:
-                                      (actOwned.status == 'submitted')
-                                          ? Colors.red
-                                          : Colors.red[200]),
+                                  primary: (actOwned.status == 'submitted')
+                                      ? Colors.red
+                                      : Colors.red[200]),
                             ),
                             ElevatedButton(
                               onPressed: (actOwned.status == 'submitted')
                                   ? () {
-                                      _editActOwnedStatus(
-                                          actOwned.id,
-                                          actOwned.user.email,
-                                          'completed');
-                                      _editUserFinishedAct(
-                                          actOwned.user.email,
-                                          actOwned.user
-                                                  .finishedActivities +
-                                              1);
+                                      _editActOwnedStatus(actOwned.id,
+                                          actOwned.user.email, 'completed');
+                                      _editUserFinishedAct(actOwned.user.email,
+                                          actOwned.user.finishedActivities + 1);
 
-                                      if (actOwned.user
-                                              .assignedActivities !=
+                                      if (actOwned.user.assignedActivities !=
                                           0) {
-                                        var progress = (actOwned.user
-                                                    .finishedActivities +
+                                        var progress = (actOwned
+                                                    .user.finishedActivities +
                                                 1) /
-                                            actOwned.user
-                                                .assignedActivities;
+                                            actOwned.user.assignedActivities;
 
                                         _editUserProgress(
-                                            actOwned.user.email,
-                                            progress);
+                                            actOwned.user.email, progress);
                                       }
                                     }
                                   : () {},
                               child: Text('Validate'),
                               style: ElevatedButton.styleFrom(
-                                  primary:
-                                      (actOwned.status == 'submitted')
-                                          ? Colors.blue
-                                          : Colors.blue[200]),
+                                  primary: (actOwned.status == 'submitted')
+                                      ? Colors.blue
+                                      : Colors.blue[200]),
                             ),
                           ],
                         ),
@@ -125,61 +113,51 @@ class _ActivityDetailState extends State<ActivityDetail> {
                             ElevatedButton(
                               onPressed: (actOwned.status == 'rejected')
                                   ? () {
-                                      _editActOwnedStatus(
-                                          actOwned.id,
-                                          actOwned.user.email,
-                                          'submitted');
+                                      _editActOwnedStatus(actOwned.id,
+                                          actOwned.user.email, 'submitted');
                                     }
                                   : () {},
                               child: Text('Back to submitted'),
                               style: ElevatedButton.styleFrom(
-                                  primary:
-                                      (actOwned.status == 'rejected')
-                                          ? Colors.yellow
-                                          : Colors.yellow[200]),
+                                  primary: (actOwned.status == 'rejected')
+                                      ? Colors.yellow
+                                      : Colors.yellow[200]),
                             ),
                             ElevatedButton(
                               onPressed: (actOwned.status == 'completed')
                                   ? () {
-                                      _editActOwnedStatus(
-                                          actOwned.id,
-                                          actOwned.user.email,
-                                          'submitted');
+                                      _editActOwnedStatus(actOwned.id,
+                                          actOwned.user.email, 'submitted');
 
-                                      _editUserFinishedAct(
-                                          actOwned.user.email,
-                                          actOwned.user
-                                                  .finishedActivities -
-                                              1);
+                                      _editUserFinishedAct(actOwned.user.email,
+                                          actOwned.user.finishedActivities - 1);
 
-                                      if (actOwned.user
-                                              .assignedActivities !=
+                                      if (actOwned.user.assignedActivities !=
                                           0) {
-                                        var progress = (actOwned.user
-                                                    .finishedActivities -
+                                        var progress = (actOwned
+                                                    .user.finishedActivities -
                                                 1) /
-                                            actOwned.user
-                                                .assignedActivities;
+                                            actOwned.user.assignedActivities;
 
                                         _editUserProgress(
-                                            actOwned.user.email,
-                                            progress);
+                                            actOwned.user.email, progress);
                                       }
                                     }
                                   : () {},
                               child: Text('Back to submitted'),
                               style: ElevatedButton.styleFrom(
-                                  primary:
-                                      (actOwned.status == 'completed')
-                                          ? Colors.brown
-                                          : Colors.brown[200]),
+                                  primary: (actOwned.status == 'completed')
+                                      ? Colors.brown
+                                      : Colors.brown[200]),
                             ),
                           ],
-                        )
+                        ),
+                        Space.doubleSpace(),
+                        ActivityNoteCard(note: actOwned.activity_note),
                       ],
                     )),
               ),
-            ),
+      ),
     );
   }
 
@@ -248,7 +226,8 @@ class ActivitySummaryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final DateFormat formatter = DateFormat('yyyy-MM-dd HH:mm');
+    // final DateFormat formatter = DateFormat('yyyy-MM-dd HH:mm');
+    final DateFormat formatter = DateFormat('EEE, d MMM, ' 'yyyy HH:mm');
     var startDate = formatter.format(actOwned.start_date);
     var dueDate = formatter.format(actOwned.end_date);
 
@@ -290,35 +269,93 @@ class ActivitySummaryCard extends StatelessWidget {
                 color: CARD_BORDER,
                 height: 1,
               ),
+              Text(
+                actOwned.activity.activity_name,
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              Space.space(),
               Row(children: [
-                Text("Start Date: ", style: TextStyle(fontSize: 17)),
-                Text(startDate, style: TextStyle(fontSize: 17)),
+                Container(
+                    width: MediaQuery.of(context).size.width * 0.25,
+                    child: Text("Start Date:", style: TextStyle(fontSize: 17))),
+                Container(
+                    width: MediaQuery.of(context).size.width * 0.55,
+                    child: Text(startDate, style: TextStyle(fontSize: 17))),
               ]),
               Space.space(),
               Row(children: [
-                Text("Due Date: ", style: TextStyle(fontSize: 17)),
-                Text(dueDate, style: TextStyle(fontSize: 17)),
+                Container(
+                    width: MediaQuery.of(context).size.width * 0.25,
+                    child: Text("Due Date:", style: TextStyle(fontSize: 17))),
+                Container(
+                    width: MediaQuery.of(context).size.width * 0.55,
+                    child: Text(dueDate, style: TextStyle(fontSize: 17))),
               ]),
               Space.space(),
               Row(children: [
-                Text("Time Remaining: ", style: TextStyle(fontSize: 17)),
-                Text(
-                    (timeRemaining['difference'].isNegative)
-                        ? 'Late ' + timeRemaining['difString']
-                        : timeRemaining['difString'],
-                    style: TextStyle(
-                        fontSize: 17,
-                        color: (timeRemaining['difference'].isNegative)
-                            ? Colors.red
-                            : Colors.black)),
+                Container(
+                    width: MediaQuery.of(context).size.width * 0.4,
+                    child: Text("Time Remaining:",
+                        style: TextStyle(fontSize: 17))),
+                Container(
+                  width: MediaQuery.of(context).size.width * 0.4,
+                  child: Text(
+                      (timeRemaining['difference'].isNegative)
+                          ? 'Late ' + timeRemaining['difString']
+                          : timeRemaining['difString'],
+                      style: TextStyle(
+                          fontSize: 17,
+                          color: (timeRemaining['difference'].isNegative)
+                              ? Colors.red
+                              : Colors.black)),
+                ),
               ]),
               Space.space(),
               Row(children: [
-                Text("Time Consumed: ", style: TextStyle(fontSize: 17)),
-                Text(timeConsumed['difString'], style: TextStyle(fontSize: 17)),
+                Container(
+                    width: MediaQuery.of(context).size.width * 0.4,
+                    child:
+                        Text("Time Consumed:", style: TextStyle(fontSize: 17))),
+                Container(
+                    width: MediaQuery.of(context).size.width * 0.4,
+                    child: Text(timeConsumed['difString'],
+                        style: TextStyle(fontSize: 17))),
               ]),
             ],
           ),
         ));
+  }
+}
+
+class ActivityNoteCard extends StatelessWidget {
+  const ActivityNoteCard({Key? key, required this.note}) : super(key: key);
+
+  final String note;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Container(
+          alignment: Alignment.centerLeft,
+          child: Text(
+            "Activity Note",
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+        ),
+        Space.space(),
+        Card(
+          child: Container(
+            child: TextFormField(
+              enabled: false,
+              maxLines: 2,
+              initialValue: (note == null) ? '' : note,
+              decoration: const InputDecoration(
+                  labelText: "Notes and comments from the employee"),
+            ),
+          ),
+        )
+      ],
+    );
   }
 }

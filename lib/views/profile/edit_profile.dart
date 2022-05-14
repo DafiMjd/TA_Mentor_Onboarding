@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 
 import 'package:provider/provider.dart';
@@ -149,6 +150,9 @@ class _EditProfileState extends State<EditProfile> {
                         height: DEFAULT_PADDING,
                       ),
                       TextFormField(
+                          inputFormatters: <TextInputFormatter>[
+                            LengthLimitingTextInputFormatter(100),
+                          ],
                           onChanged: (value) => editProv.isNameFieldEmpty =
                               _nameCtrl.text.isEmpty,
                           controller: _nameCtrl,
@@ -159,28 +163,17 @@ class _EditProfileState extends State<EditProfile> {
                         height: DEFAULT_PADDING,
                       ),
 
-                      // Email
-                      // titleField("Email", editProv.isEmailFieldEmpty),
-                      // SizedBox(
-                      //   height: DEFAULT_PADDING,
-                      // ),
-                      // TextFormField(
-                      //   onChanged: (value) => editProv.isEmailFieldEmpty =
-                      //       _emailCtrl.text.isEmpty,
-                      //   controller: _emailCtrl,
-                      //   decoration:
-                      //       const InputDecoration(border: OutlineInputBorder()),
-                      // ),
-                      // SizedBox(
-                      //   height: DEFAULT_PADDING,
-                      // ),
-
                       // Phone Number
                       titleField("Phone Number", editProv.isPhoneNumFieldEmpty),
                       SizedBox(
                         height: DEFAULT_PADDING,
                       ),
                       TextFormField(
+                          keyboardType: TextInputType.number,
+                          inputFormatters: <TextInputFormatter>[
+                            FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                            LengthLimitingTextInputFormatter(15),
+                          ],
                           onChanged: (value) => editProv.isPhoneNumFieldEmpty =
                               _phoneNumCtrl.text.isEmpty,
                           controller: _phoneNumCtrl,

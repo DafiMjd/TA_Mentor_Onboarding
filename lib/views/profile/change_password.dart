@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:provider/provider.dart';
 import 'package:ta_mentor_onboarding/providers/auth_provider.dart';
@@ -32,7 +33,6 @@ class _ChangePasswordState extends State<ChangePassword> {
   }
 
   void _changePassword(String curPass, String newPass) async {
-
     changePassProv.isSaveButtonDisabled = true;
 
     try {
@@ -87,6 +87,9 @@ class _ChangePasswordState extends State<ChangePassword> {
                         height: DEFAULT_PADDING,
                       ),
                       TextFormField(
+                          inputFormatters: <TextInputFormatter>[
+                            LengthLimitingTextInputFormatter(200),
+                          ],
                           onChanged: (value) => changePassProv
                               .isCurPassFieldEmpty = _curPassCtrl.text.isEmpty,
                           obscureText: changePassProv.isCurPassHidden,
@@ -110,6 +113,9 @@ class _ChangePasswordState extends State<ChangePassword> {
                         height: DEFAULT_PADDING,
                       ),
                       TextFormField(
+                          inputFormatters: <TextInputFormatter>[
+                            LengthLimitingTextInputFormatter(200),
+                          ],
                           onChanged: (value) => changePassProv
                               .isNewPassFieldEmpty = _newPassCtrl.text.isEmpty,
                           obscureText: changePassProv.isNewPassHidden,
@@ -133,6 +139,9 @@ class _ChangePasswordState extends State<ChangePassword> {
                         height: DEFAULT_PADDING,
                       ),
                       TextFormField(
+                          inputFormatters: <TextInputFormatter>[
+                            LengthLimitingTextInputFormatter(200),
+                          ],
                           onChanged: (value) =>
                               changePassProv.isConfPassFieldEmpty =
                                   _confirmPassCtrl.text.isEmpty,

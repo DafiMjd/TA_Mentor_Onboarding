@@ -17,11 +17,11 @@ class BottomNavBar extends StatelessWidget {
         BottomNavigationBarItem(
             icon: Icon(Icons.task), label: "", backgroundColor: Colors.white),
         BottomNavigationBarItem(
-            icon: Icon(Icons.account_box_rounded),
+            icon: Icon(Icons.leaderboard_outlined),
             label: "",
             backgroundColor: Colors.white),
         BottomNavigationBarItem(
-            icon: Icon(Icons.leaderboard_outlined),
+            icon: Icon(Icons.account_box_rounded),
             label: "",
             backgroundColor: Colors.white),
       ],

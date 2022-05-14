@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:ta_mentor_onboarding/providers/auth_provider.dart';
 import 'package:ta_mentor_onboarding/utils/custom_colors.dart';
-
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -53,6 +53,9 @@ class _LoginPageState extends State<LoginPage> {
                 style: TextStyle(fontWeight: FontWeight.w700, fontSize: 20),
               ),
               TextFormField(
+                inputFormatters: <TextInputFormatter>[
+                  LengthLimitingTextInputFormatter(200),
+                ],
                 controller: _emailController,
                 decoration: const InputDecoration(
                     border: OutlineInputBorder(), labelText: "Email"),
@@ -68,6 +71,9 @@ class _LoginPageState extends State<LoginPage> {
                 visible: loginPageProvider.isEmailFieldEmpty,
               ),
               TextFormField(
+                  inputFormatters: <TextInputFormatter>[
+                    LengthLimitingTextInputFormatter(200),
+                  ],
                   obscureText: loginPageProvider.isPasswordHidden,
                   controller: _passwordController,
                   decoration: InputDecoration(
