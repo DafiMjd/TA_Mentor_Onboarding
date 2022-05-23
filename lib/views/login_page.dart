@@ -94,12 +94,12 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 visible: loginPageProvider.isPasswordFieldEmpty,
               ),
-              Container(
-                  alignment: Alignment.centerLeft,
-                  child: InkWell(
-                      onTap: () {},
-                      child: Text("Forgot Password?",
-                          style: TextStyle(fontWeight: FontWeight.w500)))),
+              // Container(
+              //     alignment: Alignment.centerLeft,
+              //     child: InkWell(
+              //         onTap: () {},
+              //         child: Text("Forgot Password?",
+              //             style: TextStyle(fontWeight: FontWeight.w500)))),
               IgnorePointer(
                 ignoring: loginPageProvider.isLoginButtonDisabled,
                 child: ElevatedButton(
