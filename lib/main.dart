@@ -9,7 +9,7 @@ import 'package:ta_mentor_onboarding/providers/home/home_provider.dart';
 import 'package:ta_mentor_onboarding/providers/leaderboard/leaderboard_provider.dart';
 import 'package:ta_mentor_onboarding/providers/profile/change_password_provider.dart';
 import 'package:ta_mentor_onboarding/providers/profile/edit_profile_provider.dart';
-import 'package:ta_mentor_onboarding/providers/profile/user_provider.dart';
+import 'package:ta_mentor_onboarding/providers/profile/profile_provider.dart';
 import 'package:ta_mentor_onboarding/views/dashboard_page.dart';
 import 'package:ta_mentor_onboarding/views/test_home.dart';
 import 'package:ta_mentor_onboarding/views/login_page.dart';
@@ -28,7 +28,6 @@ class MyApp extends StatelessWidget {
         // ChangeNotifierProvider(create: (context) => DashboardTabProvider()),
         ChangeNotifierProvider(create: (context) => AuthProvider()),
         ChangeNotifierProvider(create: (context) => AuthProvider()),
-        ChangeNotifierProvider(create: (context) => UserProvider()),
         ChangeNotifierProxyProvider<AuthProvider, DashboardTabProvider>(
             create: (context) => DashboardTabProvider(),
             update: (context, authProv, dashPorv) {
@@ -92,6 +91,14 @@ class MyApp extends StatelessWidget {
                 return leaderboardProv..recieveToken(authProv);
               }
               return LeaderboardProvider();
+            }),
+        ChangeNotifierProxyProvider<AuthProvider, ProfileProvider>(
+            create: (context) => ProfileProvider(),
+            update: (context, authProv, profProv) {
+              if (profProv != null) {
+                return profProv..recieveToken(authProv);
+              }
+              return ProfileProvider();
             }),
 
       ],

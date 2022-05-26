@@ -6,4 +6,4 @@ const PROFILE_PAGE = 3;
 
 const DEFAULT_PADDING = 10.0;
 
-const BASE_URL = "https://ec51-36-69-195-83.ngrok.io";
+const BASE_URL = "https://cf9f-114-122-104-222.ngrok.io";

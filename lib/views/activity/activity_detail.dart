@@ -218,23 +218,54 @@ class _ActivityDetailState extends State<ActivityDetail> {
   }
 }
 
-class ActivitySummaryCard extends StatelessWidget {
+class ActivitySummaryCard extends StatefulWidget {
   const ActivitySummaryCard({Key? key, required this.actOwned})
       : super(key: key);
 
   final ActivityOwned actOwned;
 
   @override
+  State<ActivitySummaryCard> createState() => _ActivitySummaryCardState();
+}
+
+class _ActivitySummaryCardState extends State<ActivitySummaryCard> {
+  final DateFormat formatter = DateFormat('yyyy-MM-dd HH:mm');
+  late String startDate;
+  late String dueDate;
+
+  late Map<String, dynamic> timeRemaining;
+  late Map<String, dynamic> timeConsumed;
+
+  late ActivityDetailProvider prov;
+
+  @override
+  void initState() {
+    super.initState();
+
+    prov = Provider.of(context, listen: false);
+
+    _setTimeDiff();
+
+    if (timeRemaining['difference'].isNegative &&
+        widget.actOwned.status != 'late') {
+      prov.editActOwnedStatus(
+          widget.actOwned.id, widget.actOwned.user.email, 'late');
+    }
+  }
+
+  _setTimeDiff() {
+    startDate = formatter.format(widget.actOwned.start_date);
+    dueDate = formatter.format(widget.actOwned.end_date);
+
+    timeRemaining =
+        Formatter.dateFormatter(DateTime.now(), widget.actOwned.end_date);
+    timeConsumed =
+        Formatter.dateFormatter(widget.actOwned.start_date, DateTime.now());
+  }
+
+  @override
   Widget build(BuildContext context) {
     // final DateFormat formatter = DateFormat('yyyy-MM-dd HH:mm');
-    final DateFormat formatter = DateFormat('EEE, d MMM, ' 'yyyy HH:mm');
-    var startDate = formatter.format(actOwned.start_date);
-    var dueDate = formatter.format(actOwned.end_date);
-
-    Map<String, dynamic> timeRemaining =
-        Formatter.dateFormatter(actOwned.start_date, actOwned.end_date);
-    Map<String, dynamic> timeConsumed =
-        Formatter.dateFormatter(actOwned.start_date, DateTime.now());
 
     return Card(
         elevation: 5,
@@ -247,18 +278,18 @@ class ActivitySummaryCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    actOwned.user.name,
+                    widget.actOwned.user.name,
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   Container(
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
-                        color: STATUSES[actOwned.status]!['color'],
+                        color: STATUSES[widget.actOwned.status]!['color'],
                         borderRadius: BorderRadius.all(Radius.circular(20))),
                     width: 86,
                     height: 16,
                     child: Text(
-                      STATUSES[actOwned.status]!['title'],
+                      STATUSES[widget.actOwned.status]!['title'],
                       style: TextStyle(color: Colors.white, fontSize: 11),
                     ),
                   ),
@@ -270,7 +301,7 @@ class ActivitySummaryCard extends StatelessWidget {
                 height: 1,
               ),
               Text(
-                actOwned.activity.activity_name,
+                widget.actOwned.activity.activity_name,
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               Space.space(),
