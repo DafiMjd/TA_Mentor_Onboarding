@@ -6,15 +6,12 @@ import 'package:provider/provider.dart';
 import 'package:ta_mentor_onboarding/models/user.dart';
 import 'package:ta_mentor_onboarding/providers/auth_provider.dart';
 import 'package:ta_mentor_onboarding/providers/dashboard_tab_provider.dart';
-import 'package:ta_mentor_onboarding/providers/profile/profile_provider.dart';
 import 'package:ta_mentor_onboarding/utils/constans.dart';
 import 'package:ta_mentor_onboarding/utils/custom_colors.dart';
 import 'package:ta_mentor_onboarding/views/bottom_navbar.dart';
 import 'package:ta_mentor_onboarding/views/dashboard_page.dart';
 import 'package:ta_mentor_onboarding/views/profile/change_password.dart';
 import 'package:ta_mentor_onboarding/views/profile/edit_profile.dart';
-import 'package:ta_mentor_onboarding/widgets/loading_widget.dart';
-import 'package:ta_mentor_onboarding/widgets/space.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key, required this.user}) : super(key: key);
@@ -28,7 +25,6 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   late AuthProvider authProv;
   late DashboardTabProvider dashboardTabProv;
-  late ProfileProvider profProv;
 
   FutureOr onGoBack(dynamic value) {
     setState(() {});
@@ -40,7 +36,6 @@ class _ProfilePageState extends State<ProfilePage> {
     dashboardTabProv =
         Provider.of<DashboardTabProvider>(context, listen: false);
     authProv = Provider.of<AuthProvider>(context, listen: false);
-    profProv = Provider.of<ProfileProvider>(context, listen: false);
   }
 
   @override
@@ -63,13 +58,14 @@ class _ProfilePageState extends State<ProfilePage> {
               child: Card(
                 child: Row(
                   children: [
-                    (widget.user.profPicLink == null)
-                        ? Icon(
+                    // (widget.user.profPicLink == null)
+                        // ? 
+                        Icon(
                             Icons.account_circle,
                             size:
                                 MediaQuery.of(context).size.height * 0.14 - 20,
-                          )
-                        : getProfPic(widget.user.profPicLink),
+                          ),
+                        // : getProfPic(widget.user.profPicLink),
                     Container(
                         margin: EdgeInsets.only(top: 15, left: 13, bottom: 15),
                         child: Column(
@@ -372,7 +368,7 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Widget getProfPic(link) {
-    var url = BASE_URL + 'dd/' + link;
+    var url = BASE_URL + link;
 
     return CachedNetworkImage(
         imageUrl: url,

@@ -3,15 +3,14 @@ import 'package:provider/provider.dart';
 import 'package:ta_mentor_onboarding/providers/activity/activity_detail_provider.dart';
 import 'package:ta_mentor_onboarding/providers/activity/activity_provider.dart';
 import 'package:ta_mentor_onboarding/providers/activity/browse_activity_provider.dart';
+import 'package:ta_mentor_onboarding/providers/activity/category_provider.dart';
 import 'package:ta_mentor_onboarding/providers/auth_provider.dart';
 import 'package:ta_mentor_onboarding/providers/dashboard_tab_provider.dart';
 import 'package:ta_mentor_onboarding/providers/home/home_provider.dart';
 import 'package:ta_mentor_onboarding/providers/leaderboard/leaderboard_provider.dart';
 import 'package:ta_mentor_onboarding/providers/profile/change_password_provider.dart';
 import 'package:ta_mentor_onboarding/providers/profile/edit_profile_provider.dart';
-import 'package:ta_mentor_onboarding/providers/profile/profile_provider.dart';
 import 'package:ta_mentor_onboarding/views/dashboard_page.dart';
-import 'package:ta_mentor_onboarding/views/test_home.dart';
 import 'package:ta_mentor_onboarding/views/login_page.dart';
 
 void main() {
@@ -92,15 +91,14 @@ class MyApp extends StatelessWidget {
               }
               return LeaderboardProvider();
             }),
-        ChangeNotifierProxyProvider<AuthProvider, ProfileProvider>(
-            create: (context) => ProfileProvider(),
-            update: (context, authProv, profProv) {
-              if (profProv != null) {
-                return profProv..recieveToken(authProv);
+        ChangeNotifierProxyProvider<AuthProvider, CategoryProvider>(
+            create: (context) => CategoryProvider(),
+            update: (context, authProv, categoryProv) {
+              if (categoryProv != null) {
+                return categoryProv..recieveToken(authProv);
               }
-              return ProfileProvider();
+              return CategoryProvider();
             }),
-
       ],
       builder: (context, child) => Consumer<AuthProvider>(
           builder: (context, auth, child) => MaterialApp(

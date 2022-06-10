@@ -12,9 +12,10 @@ import 'package:ta_mentor_onboarding/widgets/loading_widget.dart';
 import 'package:ta_mentor_onboarding/widgets/space.dart';
 
 class BrowseActivity extends StatefulWidget {
-  const BrowseActivity({Key? key, required this.user}) : super(key: key);
+  const BrowseActivity({Key? key, required this.user, required this.cat_id}) : super(key: key);
 
   final User user;
+  final int cat_id;
 
   @override
   State<BrowseActivity> createState() => _BrowseActivityState();
@@ -57,10 +58,10 @@ class _BrowseActivityState extends State<BrowseActivity> {
 
     try {
       if (status == allActId) {
-        activitiesOwned = await prov.fetchActOwnedByUser(email);
+        activitiesOwned = await prov.fetchActOwnedByUser(email, widget.cat_id);
       } else {
         print(status);
-        activitiesOwned = await prov.fetchActOwnedByUserByStatus(email, status);
+        activitiesOwned = await prov.fetchActOwnedByUserByStatus(email, widget.cat_id, status);
       }
       prov.isFetchingData = false;
     } catch (e) {

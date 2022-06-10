@@ -94,6 +94,9 @@ class _ActivityDetailState extends State<ActivityDetail> {
 
                                         _editUserProgress(
                                             actOwned.user.email, progress);
+
+                                        _editMentorEmail(
+                                            actOwned.id, actOwned.user.email);
                                       }
                                     }
                                   : () {},
@@ -161,7 +164,7 @@ class _ActivityDetailState extends State<ActivityDetail> {
     );
   }
 
-  void _errorEditActOwnedStatus(e) async {
+  void _error(e) async {
     return showDialog(
         context: context,
         builder: (context) {
@@ -177,7 +180,7 @@ class _ActivityDetailState extends State<ActivityDetail> {
       prov.isFetchingData = false;
     } catch (e) {
       prov.isFetchingData = false;
-      return _errorEditActOwnedStatus(e);
+      return _error(e);
     }
   }
 
@@ -189,7 +192,7 @@ class _ActivityDetailState extends State<ActivityDetail> {
       prov.isFetchingData = false;
     } catch (e) {
       prov.isFetchingData = false;
-      return _errorEditActOwnedStatus(e);
+      return _error(e);
     }
   }
 
@@ -201,7 +204,7 @@ class _ActivityDetailState extends State<ActivityDetail> {
       prov.isFetchingData = false;
     } catch (e) {
       prov.isFetchingData = false;
-      return _errorEditActOwnedStatus(e);
+      return _error(e);
     }
   }
 
@@ -213,7 +216,19 @@ class _ActivityDetailState extends State<ActivityDetail> {
       prov.isFetchingData = false;
     } catch (e) {
       prov.isFetchingData = false;
-      return _errorEditActOwnedStatus(e);
+      return _error(e);
+    }
+  }
+
+  void _editMentorEmail(int id, String email) async {
+    prov.isFetchingData = true;
+
+    try {
+      await prov.editMentorEmail(id, email);
+      prov.isFetchingData = false;
+    } catch (e) {
+      prov.isFetchingData = false;
+      return _error(e);
     }
   }
 }

@@ -47,8 +47,8 @@ class BrowseActivityProvider extends ChangeNotifier {
 
   // API Request
 
-  Future<List<ActivityOwned>> fetchActOwnedByUser(String email) async {
-    String url = "$BASE_URL/api/ActivitiesOwned/$email";
+  Future<List<ActivityOwned>> fetchActOwnedByUser(String email, int cat_id) async {
+    String url = "$BASE_URL/api/ActivitiesOwnedByCategory/$email/$cat_id";
 
     try {
       var result = await http.get(
@@ -83,8 +83,8 @@ class BrowseActivityProvider extends ChangeNotifier {
     }
   }
 
-Future<List<ActivityOwned>> fetchActOwnedByUserByStatus(String email, String status) async {
-    String url = "$BASE_URL/api/ActivitiesOwned/$email/$status";
+Future<List<ActivityOwned>> fetchActOwnedByUserByStatus(String email, int cat_id, String status) async {
+    String url = "$BASE_URL/api/ActivitiesOwnedByCategory/$email/$cat_id/$status";
 
     try {
       var result = await http.get(

@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:ta_mentor_onboarding/models/activity_owned.dart';
 import 'package:ta_mentor_onboarding/models/user.dart';
+import 'package:ta_mentor_onboarding/providers/auth_provider.dart';
 import 'package:ta_mentor_onboarding/utils/constans.dart';
 
 import 'package:http/http.dart' as http;
@@ -8,7 +9,7 @@ import 'dart:convert';
 
 class ActivityDetailProvider extends ChangeNotifier {
   late String _token, _email;
-  void recieveToken(auth) {
+  void recieveToken(AuthProvider auth) {
     _token = auth.token;
     _email = auth.email;
     notifyListeners();
@@ -109,6 +110,37 @@ class ActivityDetailProvider extends ChangeNotifier {
     }
   }
 
+  Future<User> editMentorEmail(
+    int id,
+    String email,
+  ) async {
+    String url = "$BASE_URL/api/User/mentor-email";
+
+    try {
+      var result = await http.put(Uri.parse(url),
+          headers: {
+            "Access-Control-Allow-Origin":
+                "*", // Required for CORS support to work
+            "Access-Control-Allow-Methods": "GET",
+            "Access-Control-Allow-Credentials": "true",
+            "Access-Control-Expose-Headers": "Authorization, authenticated",
+            'Content-Type': 'application/json; charset=UTF-8',
+            'Authorization': 'Bearer $_token',
+          },
+          body: jsonEncode({"email": email, "mentor_email": _email}));
+      if (result.statusCode == 400) {
+        Map<String, dynamic> responseData = jsonDecode(result.body);
+        throw responseData['errorMessage'];
+      }
+      if (result.statusCode == 502 || result.statusCode == 500) {
+        throw "Server Down";
+      }
+      return compute(parseUser, result.body);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
   Future<ActivityOwned> fetchActOwnedById(int id) async {
     String url = "$BASE_URL/api/ActivitiesOwnedById/$id";
 
@@ -154,7 +186,6 @@ ActivityOwned parseActivityOwned(String responseBody) {
 
   return ActivityOwned.fromJson(parsed[0]);
 }
-
 
 User parseUser(String responseBody) {
   final parsed = jsonDecode(responseBody);

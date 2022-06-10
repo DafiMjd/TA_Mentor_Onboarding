@@ -6,6 +6,7 @@ import 'package:ta_mentor_onboarding/providers/activity/activity_provider.dart';
 import 'package:ta_mentor_onboarding/utils/custom_colors.dart';
 import 'package:ta_mentor_onboarding/utils/formatter.dart';
 import 'package:ta_mentor_onboarding/views/activity/browse_activity.dart';
+import 'package:ta_mentor_onboarding/views/activity/category_page.dart';
 import 'package:ta_mentor_onboarding/views/bottom_navbar.dart';
 import 'package:ta_mentor_onboarding/widgets/error_alert_dialog.dart';
 import 'package:ta_mentor_onboarding/widgets/loading_widget.dart';
@@ -91,9 +92,10 @@ class _ActivityPageState extends State<ActivityPage> {
                           press: () {
                             Navigator.push(context,
                                 MaterialPageRoute(builder: (context) {
-                              return BrowseActivity(
-                                user: users[i],
-                              );
+                              // return BrowseActivity(
+                              //   user: users[i],
+                              // );
+                              return CategoryPage(user: users[i],);
                             }));
                           },
                         );
