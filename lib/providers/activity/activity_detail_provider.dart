@@ -38,7 +38,7 @@ class ActivityDetailProvider extends ChangeNotifier {
             'Content-Type': 'application/json; charset=UTF-8',
             'Authorization': 'Bearer $_token',
           },
-          body: jsonEncode({"id": id, "user_email": _email, "status": status}));
+          body: jsonEncode({"id": id, "user_email": email, "status": status}));
 
       if (result.statusCode == 400) {
         Map<String, dynamic> responseData = jsonDecode(result.body);
@@ -110,11 +110,14 @@ class ActivityDetailProvider extends ChangeNotifier {
     }
   }
 
-  Future<User> editMentorEmail(
+  Future<void> editMentorEmail(
     int id,
     String email,
   ) async {
-    String url = "$BASE_URL/api/User/mentor-email";
+    String url = "$BASE_URL/api/ActivitiesOwned/mentor-email";
+
+    print('dafi: ' + email);
+    print('majid: ' + _email);
 
     try {
       var result = await http.put(Uri.parse(url),
@@ -127,15 +130,16 @@ class ActivityDetailProvider extends ChangeNotifier {
             'Content-Type': 'application/json; charset=UTF-8',
             'Authorization': 'Bearer $_token',
           },
-          body: jsonEncode({"email": email, "mentor_email": _email}));
+          body: jsonEncode({"id": id, "user_email": email, "mentor_email": _email}));
       if (result.statusCode == 400) {
+        print('dafi2');
         Map<String, dynamic> responseData = jsonDecode(result.body);
         throw responseData['errorMessage'];
       }
       if (result.statusCode == 502 || result.statusCode == 500) {
         throw "Server Down";
       }
-      return compute(parseUser, result.body);
+      // return compute(parseUser, result.body);
     } catch (e) {
       rethrow;
     }

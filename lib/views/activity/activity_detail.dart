@@ -3,11 +3,9 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:ta_mentor_onboarding/models/activity_owned.dart';
 import 'package:ta_mentor_onboarding/providers/activity/activity_detail_provider.dart';
-import 'package:ta_mentor_onboarding/utils/constans.dart';
 import 'package:ta_mentor_onboarding/utils/custom_colors.dart';
 import 'package:ta_mentor_onboarding/utils/formatter.dart';
 import 'package:ta_mentor_onboarding/utils/status_utils.dart';
-import 'package:ta_mentor_onboarding/views/dashboard_page.dart';
 import 'package:ta_mentor_onboarding/widgets/error_alert_dialog.dart';
 import 'package:ta_mentor_onboarding/widgets/loading_widget.dart';
 import 'package:ta_mentor_onboarding/widgets/space.dart';
@@ -84,6 +82,8 @@ class _ActivityDetailState extends State<ActivityDetail> {
                                           actOwned.user.email, 'completed');
                                       _editUserFinishedAct(actOwned.user.email,
                                           actOwned.user.finishedActivities + 1);
+                                      _editMentorEmail(
+                                          actOwned.id, actOwned.user.email);
 
                                       if (actOwned.user.assignedActivities !=
                                           0) {
@@ -95,8 +95,6 @@ class _ActivityDetailState extends State<ActivityDetail> {
                                         _editUserProgress(
                                             actOwned.user.email, progress);
 
-                                        _editMentorEmail(
-                                            actOwned.id, actOwned.user.email);
                                       }
                                     }
                                   : () {},
@@ -108,53 +106,56 @@ class _ActivityDetailState extends State<ActivityDetail> {
                             ),
                           ],
                         ),
-                        Space.space(),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            ElevatedButton(
-                              onPressed: (actOwned.status == 'rejected')
-                                  ? () {
-                                      _editActOwnedStatus(actOwned.id,
-                                          actOwned.user.email, 'submitted');
-                                    }
-                                  : () {},
-                              child: Text('Back to submitted'),
-                              style: ElevatedButton.styleFrom(
-                                  primary: (actOwned.status == 'rejected')
-                                      ? Colors.yellow
-                                      : Colors.yellow[200]),
-                            ),
-                            ElevatedButton(
-                              onPressed: (actOwned.status == 'completed')
-                                  ? () {
-                                      _editActOwnedStatus(actOwned.id,
-                                          actOwned.user.email, 'submitted');
+                        
+                        
+                        // Space.space(),
+                        // Row(
+                        //   crossAxisAlignment: CrossAxisAlignment.center,
+                        //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        //   children: [
+                        //     ElevatedButton(
+                        //       onPressed: (actOwned.status == 'rejected')
+                        //           ? () {
+                        //               _editActOwnedStatus(actOwned.id,
+                        //                   actOwned.user.email, 'submitted');
+                        //             }
+                        //           : () {},
+                        //       child: Text('Back to submitted'),
+                        //       style: ElevatedButton.styleFrom(
+                        //           primary: (actOwned.status == 'rejected')
+                        //               ? Colors.yellow
+                        //               : Colors.yellow[200]),
+                        //     ),
+                        //     ElevatedButton(
+                        //       onPressed: (actOwned.status == 'completed')
+                        //           ? () {
+                        //               _editActOwnedStatus(actOwned.id,
+                        //                   actOwned.user.email, 'submitted');
 
-                                      _editUserFinishedAct(actOwned.user.email,
-                                          actOwned.user.finishedActivities - 1);
+                        //               _editUserFinishedAct(actOwned.user.email,
+                        //                   actOwned.user.finishedActivities - 1);
 
-                                      if (actOwned.user.assignedActivities !=
-                                          0) {
-                                        var progress = (actOwned
-                                                    .user.finishedActivities -
-                                                1) /
-                                            actOwned.user.assignedActivities;
+                        //               if (actOwned.user.assignedActivities !=
+                        //                   0) {
+                        //                 var progress = (actOwned
+                        //                             .user.finishedActivities -
+                        //                         1) /
+                        //                     actOwned.user.assignedActivities;
 
-                                        _editUserProgress(
-                                            actOwned.user.email, progress);
-                                      }
-                                    }
-                                  : () {},
-                              child: Text('Back to submitted'),
-                              style: ElevatedButton.styleFrom(
-                                  primary: (actOwned.status == 'completed')
-                                      ? Colors.brown
-                                      : Colors.brown[200]),
-                            ),
-                          ],
-                        ),
+                        //                 _editUserProgress(
+                        //                     actOwned.user.email, progress);
+                        //               }
+                        //             }
+                        //           : () {},
+                        //       child: Text('Back to submitted'),
+                        //       style: ElevatedButton.styleFrom(
+                        //           primary: (actOwned.status == 'completed')
+                        //               ? Colors.brown
+                        //               : Colors.brown[200]),
+                        //     ),
+                        //   ],
+                        // ),
+                        
                         Space.doubleSpace(),
                         ActivityNoteCard(note: actOwned.activity_note),
                       ],
@@ -215,6 +216,7 @@ class _ActivityDetailState extends State<ActivityDetail> {
       await prov.editUserProgress(email, progress);
       prov.isFetchingData = false;
     } catch (e) {
+      print('dafi1');
       prov.isFetchingData = false;
       return _error(e);
     }
@@ -224,7 +226,7 @@ class _ActivityDetailState extends State<ActivityDetail> {
     prov.isFetchingData = true;
 
     try {
-      await prov.editMentorEmail(id, email);
+      // await prov.editMentorEmail(id, email);
       prov.isFetchingData = false;
     } catch (e) {
       prov.isFetchingData = false;
@@ -367,6 +369,16 @@ class _ActivitySummaryCardState extends State<ActivitySummaryCard> {
                     child: Text(timeConsumed['difString'],
                         style: TextStyle(fontSize: 17))),
               ]),
+              Space.space(),
+              Visibility(
+                visible: widget.actOwned.status == 'completed' ||
+                    widget.actOwned.status == 'rejected',
+                child: Row(children: [
+                  Text("Validated By: ", style: TextStyle(fontSize: 17)),
+                  Text(widget.actOwned.mentor_email!,
+                      style: TextStyle(fontSize: 17)),
+                ]),
+              ),
             ],
           ),
         ));

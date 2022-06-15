@@ -7,7 +7,7 @@ import 'package:ta_mentor_onboarding/models/user.dart';
 class ActivityOwned {
   int id;
   Activity activity;
-  ActivityCategory? category;
+  // ActivityCategory? category;
   DateTime start_date, end_date;
   String status, activity_note;
   bool late;
@@ -17,7 +17,7 @@ class ActivityOwned {
   ActivityOwned(
       {required this.id,
       required this.activity,
-      required this.category,
+      // required this.category,
       required this.start_date,
       required this.end_date,
       required this.status,
@@ -39,7 +39,7 @@ class ActivityOwned {
     return ActivityOwned(
         id: json['id'],
         activity: Activity.fromJson(json['activities_']),
-        category: cat,
+        // category: cat,
         start_date: startDate,
         end_date: endDate,
         status: json['status'],
