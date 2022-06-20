@@ -47,7 +47,7 @@ class _BrowseActivityState extends State<BrowseActivity> {
     return showDialog(
         context: context,
         builder: (context) {
-          return ErrorAlertDialog(error: "HTTP Error", title: e.toString());
+          return ErrorAlertDialog(error: e.toString(), title: "HTTP Error");
         });
   }
 

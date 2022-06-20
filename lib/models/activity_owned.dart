@@ -10,7 +10,6 @@ class ActivityOwned {
   // ActivityCategory? category;
   DateTime start_date, end_date;
   String status, activity_note;
-  bool late;
   String? mentor_email;
   User user;
 
@@ -21,7 +20,6 @@ class ActivityOwned {
       required this.start_date,
       required this.end_date,
       required this.status,
-      required this.late,
       this.mentor_email,
       required this.activity_note,
       required this.user});
@@ -43,7 +41,6 @@ class ActivityOwned {
         start_date: startDate,
         end_date: endDate,
         status: json['status'],
-        late: json['late'],
         mentor_email: json['mentor_email'],
         activity_note: note,
         user: User.fromJson(json['user_']),

@@ -5,6 +5,7 @@ import 'package:ta_mentor_onboarding/providers/activity/activity_provider.dart';
 import 'package:ta_mentor_onboarding/providers/activity/browse_activity_provider.dart';
 import 'package:ta_mentor_onboarding/providers/activity/category_provider.dart';
 import 'package:ta_mentor_onboarding/providers/auth_provider.dart';
+import 'package:ta_mentor_onboarding/providers/base_provider.dart';
 import 'package:ta_mentor_onboarding/providers/dashboard_tab_provider.dart';
 import 'package:ta_mentor_onboarding/providers/home/home_provider.dart';
 import 'package:ta_mentor_onboarding/providers/leaderboard/leaderboard_provider.dart';
@@ -98,6 +99,14 @@ class MyApp extends StatelessWidget {
                 return categoryProv..recieveToken(authProv);
               }
               return CategoryProvider();
+            }),
+        ChangeNotifierProxyProvider<AuthProvider, BaseProvider>(
+            create: (context) => BaseProvider(),
+            update: (context, authProv, baseProv) {
+              if (baseProv != null) {
+                return baseProv..recieveToken(authProv);
+              }
+              return BaseProvider();
             }),
       ],
       builder: (context, child) => Consumer<AuthProvider>(

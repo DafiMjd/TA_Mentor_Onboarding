@@ -6,9 +6,10 @@ import 'package:ta_mentor_onboarding/models/activity_owned.dart';
 import 'dart:convert';
 
 import 'package:ta_mentor_onboarding/models/status_menu.dart';
+import 'package:ta_mentor_onboarding/providers/base_provider.dart';
 import 'package:ta_mentor_onboarding/utils/constans.dart';
 
-class BrowseActivityProvider extends ChangeNotifier {
+class BrowseActivityProvider extends BaseProvider {
   List<StatusMenu> _menus = [
     StatusMenu(id: "all_activity", statusName: "All Activity", selected: false),
     StatusMenu(id: "assigned", statusName: "Assigned", selected: false),
@@ -32,23 +33,17 @@ class BrowseActivityProvider extends ChangeNotifier {
     // notifyListeners();
   }
 
-  late String _token, _email;
-  void recieveToken(auth) {
-    _token = auth.token;
-    _email = auth.email;
-    notifyListeners();
-  }
-
-  bool _isFetchingData = false;
-  get isFetchingData => _isFetchingData;
-  set isFetchingData(val) {
-    _isFetchingData = val;
-  }
-
   // API Request
 
   Future<List<ActivityOwned>> fetchActOwnedByUser(String email, int cat_id) async {
     String url = "$BASE_URL/api/ActivitiesOwnedByCategory/$email/$cat_id";
+
+    bool tokenValid = await checkToken();
+    var _token = super.token;
+    if (!tokenValid) {
+      logout();
+      throw 'you have been logged out';
+    }
 
     try {
       var result = await http.get(
@@ -85,6 +80,13 @@ class BrowseActivityProvider extends ChangeNotifier {
 
 Future<List<ActivityOwned>> fetchActOwnedByUserByStatus(String email, int cat_id, String status) async {
     String url = "$BASE_URL/api/ActivitiesOwnedByCategory/$email/$cat_id/$status";
+
+    bool tokenValid = await checkToken();
+    var _token = super.token;
+    if (!tokenValid) {
+      logout();
+      throw 'you have been logged out';
+    }
 
     try {
       var result = await http.get(

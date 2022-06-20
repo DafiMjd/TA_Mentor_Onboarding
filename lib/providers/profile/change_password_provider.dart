@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 
 import 'package:http/http.dart' as http;
+import 'package:ta_mentor_onboarding/providers/base_provider.dart';
 import 'dart:convert';
 
 import 'package:ta_mentor_onboarding/utils/constans.dart';
 
-class ChangePasswordProvider extends ChangeNotifier {
+class ChangePasswordProvider extends BaseProvider {
   bool _isCurPassFieldEmpty = true;
   bool _isNewPassFieldEmpty = true;
   bool _isConfPassFieldEmpty = true;
@@ -72,23 +73,18 @@ class ChangePasswordProvider extends ChangeNotifier {
     _isPassDifferent = val;
   }
 
-  late String _token, _email;
-  void recieveToken(auth) {
-    _token = auth.token;
-    _email = auth.email;
-    notifyListeners();
-  }
-
-  bool _isFetchingData = false;
-  get isFetchingData => _isFetchingData;
-  set isFetchingData(val) {
-    _isFetchingData = val;
-  }
-
   // Change Password
   Future<void> changePassword(String curPass, String newPass) async {
     // getAuthInfo();
     String apiURL = "$BASE_URL/api/User/edit-password";
+
+    bool tokenValid = await checkToken();
+    var _token = super.token;
+    var _email = super.email;
+    if (!tokenValid) {
+      logout();
+      throw 'you have been logged out';
+    }
 
     try {
       var result = await http.put(Uri.parse(apiURL),

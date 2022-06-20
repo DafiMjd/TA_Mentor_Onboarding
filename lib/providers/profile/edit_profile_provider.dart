@@ -5,9 +5,10 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 import 'package:ta_mentor_onboarding/models/user.dart';
+import 'package:ta_mentor_onboarding/providers/base_provider.dart';
 import 'package:ta_mentor_onboarding/utils/constans.dart';
 
-class EditProfileProvider extends ChangeNotifier {
+class EditProfileProvider extends BaseProvider {
 
   bool _isEmailFieldEmpty = false;
   bool _isNameFieldEmpty = false;
@@ -41,22 +42,15 @@ class EditProfileProvider extends ChangeNotifier {
   }
   // ==========================
 
-  late String _token, _email;
-  void recieveToken(auth) {
-    _token = auth.token;
-    _email = auth.email;
-    notifyListeners();
-  }
-
-  bool _isFetchingData = false;
-  get isFetchingData => _isFetchingData;
-  set isFetchingData(val) {
-    _isFetchingData = val;
-  }
-
   // Users
   Future<User> getUserInfo() async {
-    // getAuthInfo();
+    bool tokenValid = await checkToken();
+    var _token = super.token;
+    var _email = super.email;
+    if (!tokenValid) {
+      logout();
+      throw 'you have been logged out';
+    }
     String apiURL = "$BASE_URL/api/User/$_email";
 
     try {
@@ -88,6 +82,13 @@ class EditProfileProvider extends ChangeNotifier {
       String name, String gender, String phoneNum, String date, int role_id, int jobtitle_id) async {
     // getAuthInfo();
     String apiURL = "$BASE_URL/api/User/";
+    bool tokenValid = await checkToken();
+    var _token = super.token;
+    var _email = super.email;
+    if (!tokenValid) {
+      logout();
+      throw 'you have been logged out';
+    }
 
     try {
       var result = await http.put(Uri.parse(apiURL),
