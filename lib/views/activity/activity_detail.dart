@@ -263,11 +263,6 @@ class _ActivitySummaryCardState extends State<ActivitySummaryCard> {
 
     _setTimeDiff();
 
-    if (timeRemaining['difference'].isNegative &&
-        widget.actOwned.status != 'late') {
-      prov.editActOwnedStatus(
-          widget.actOwned.id, widget.actOwned.user.email, 'late');
-    }
   }
 
   _setTimeDiff() {
