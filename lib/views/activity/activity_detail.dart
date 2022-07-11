@@ -108,53 +108,53 @@ class _ActivityDetailState extends State<ActivityDetail> {
                         ),
                         
                         
-                        // Space.space(),
-                        // Row(
-                        //   crossAxisAlignment: CrossAxisAlignment.center,
-                        //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        //   children: [
-                        //     ElevatedButton(
-                        //       onPressed: (actOwned.status == 'rejected')
-                        //           ? () {
-                        //               _editActOwnedStatus(actOwned.id,
-                        //                   actOwned.user.email, 'submitted');
-                        //             }
-                        //           : () {},
-                        //       child: Text('Back to submitted'),
-                        //       style: ElevatedButton.styleFrom(
-                        //           primary: (actOwned.status == 'rejected')
-                        //               ? Colors.yellow
-                        //               : Colors.yellow[200]),
-                        //     ),
-                        //     ElevatedButton(
-                        //       onPressed: (actOwned.status == 'completed')
-                        //           ? () {
-                        //               _editActOwnedStatus(actOwned.id,
-                        //                   actOwned.user.email, 'submitted');
+                        Space.space(),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            ElevatedButton(
+                              onPressed: (actOwned.status == 'rejected')
+                                  ? () {
+                                      _editActOwnedStatus(actOwned.id,
+                                          actOwned.user.email, 'submitted');
+                                    }
+                                  : () {},
+                              child: Text('Back to submitted'),
+                              style: ElevatedButton.styleFrom(
+                                  primary: (actOwned.status == 'rejected')
+                                      ? Colors.yellow
+                                      : Colors.yellow[200]),
+                            ),
+                            ElevatedButton(
+                              onPressed: (actOwned.status == 'completed')
+                                  ? () {
+                                      _editActOwnedStatus(actOwned.id,
+                                          actOwned.user.email, 'submitted');
 
-                        //               _editUserFinishedAct(actOwned.user.email,
-                        //                   actOwned.user.finishedActivities - 1);
+                                      _editUserFinishedAct(actOwned.user.email,
+                                          actOwned.user.finishedActivities - 1);
 
-                        //               if (actOwned.user.assignedActivities !=
-                        //                   0) {
-                        //                 var progress = (actOwned
-                        //                             .user.finishedActivities -
-                        //                         1) /
-                        //                     actOwned.user.assignedActivities;
+                                      if (actOwned.user.assignedActivities !=
+                                          0) {
+                                        var progress = (actOwned
+                                                    .user.finishedActivities -
+                                                1) /
+                                            actOwned.user.assignedActivities;
 
-                        //                 _editUserProgress(
-                        //                     actOwned.user.email, progress);
-                        //               }
-                        //             }
-                        //           : () {},
-                        //       child: Text('Back to submitted'),
-                        //       style: ElevatedButton.styleFrom(
-                        //           primary: (actOwned.status == 'completed')
-                        //               ? Colors.brown
-                        //               : Colors.brown[200]),
-                        //     ),
-                        //   ],
-                        // ),
+                                        _editUserProgress(
+                                            actOwned.user.email, progress);
+                                      }
+                                    }
+                                  : () {},
+                              child: Text('Back to submitted'),
+                              style: ElevatedButton.styleFrom(
+                                  primary: (actOwned.status == 'completed')
+                                      ? Colors.brown
+                                      : Colors.brown[200]),
+                            ),
+                          ],
+                        ),
                         
                         Space.doubleSpace(),
                         ActivityNoteCard(note: actOwned.activity_note),

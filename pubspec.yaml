@@ -65,6 +65,14 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^1.0.0
+  flutter_launcher_icons: ^0.9.3
+
+
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/images/logo_garuda.png"
+  adaptive_icon_background: "#ffFEBC4B"
 
 flutter_native_splash:
   color: "#8D8180"
